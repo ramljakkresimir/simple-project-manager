@@ -30,6 +30,6 @@ project can have several features tied to specific dates.
 
 ### Organizational
 
-- Divide the project into smaller tasks (e.g., User CRUD, Event CRUD) so each team member can focus on specific modules while contributing equally
+- Divide the project into smaller tasks (e.g., User CRUD, Project CRUD, Feature CRUD, ...) so each team member can focus on specific modules while contributing equally
 - Work together on key tasks like database design and project setup
 - Keep in touch with your teammates to share progress and ideas (teams, discord, ...)
