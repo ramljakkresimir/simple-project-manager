@@ -6,6 +6,8 @@ In the following text you will read project requirements, coding and collaborati
 
 :warning: Read your task and guidelines carefully!
 
+[See the board from introduction](https://excalidraw.com/#json=u01S_xBEVSAQZHQfmQFOo,sPtGX6P6pFgHMxQLhrAoXA)
+
 ## Diagram
 
 ![Component Diagram](/docs/component-diagram.drawio.png)
