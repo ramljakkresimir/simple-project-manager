@@ -4,7 +4,7 @@ services:
     environment:
       - 'POSTGRES_DB=ogcsManager'
       - 'POSTGRES_PASSWORD=password'
-      - 'POSTGRES_USER=user'
+      - 'POSTGRES_USER=postgres'
     ports:
       - '5432:5432'
 
