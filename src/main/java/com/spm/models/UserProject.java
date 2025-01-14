@@ -14,13 +14,13 @@ public class UserProject {
     @Column(name = "userid", nullable = false)
     private Integer id;
 
-    @Column(name = "username", nullable = false)
-    private Integer username;
+    @Column(name = "username", nullable = false, length = 40)
+    private String username;
 
-    @Column(name = "name", nullable = false, length = 20)
+    @Column(name = "name", nullable = false, length = 40)
     private String name;
 
-    @Column(name = "surname", nullable = false, length = 20)
+    @Column(name = "surname", nullable = false, length = 40)
     private String surname;
 
     @Column(name = "age", nullable = false)
