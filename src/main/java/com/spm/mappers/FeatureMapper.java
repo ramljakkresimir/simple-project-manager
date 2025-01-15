@@ -9,23 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class FeatureMapper {
 
-    public static FeatureViewDto featureToFeatureViewDto(Feature feature) {
+    public Feature toEntity(FeatureCreationDto featureCreationDto, Project project) {
+        Feature feature = new Feature();
+        feature.setName(featureCreationDto.name());
+        feature.setDescription(featureCreationDto.description());
+        feature.setDeadline(featureCreationDto.deadline());
+        feature.setProjectid(project);
+        return feature;
+    }
+
+    public FeatureViewDto toDto(Feature feature) {
         return new FeatureViewDto(
                 feature.getId(),
                 feature.getName(),
                 feature.getDescription(),
                 feature.getDeadline(),
-                //feature.getProject().getName()
+                feature.getProjectid() != null ? feature.getProjectid().getName() : null
         );
-    }
-
-    public static Feature featureCreationToFeature(FeatureCreationDto featureDto, Project project) {
-        Feature feature = new Feature();
-        feature.setId(null);
-        feature.setName(featureDto.name());
-        feature.setDescription(featureDto.description());
-        feature.setDeadline(featureDto.deadline());
-        //feature.setProject(project);
-        return feature;
     }
 }
