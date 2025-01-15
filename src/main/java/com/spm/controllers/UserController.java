@@ -2,7 +2,9 @@ package com.spm.controllers;
 
 
 import com.spm.dtos.user.UserCreationDto;
+import com.spm.dtos.user.UserEditDto;
 import com.spm.dtos.user.UserViewDto;
+import com.spm.mappers.user.UserMapper;
 import com.spm.models.UserProject;
 import com.spm.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,27 +23,37 @@ public class UserController {
 private final UserService userService;
 
 
-@GetMapping("")
+@GetMapping
     public ResponseEntity<List<UserViewDto>> getAllUsers() {
 
-        List<UserViewDto> users = userService.getAllUsersViewDto();
-        return ResponseEntity.ok().body(users);
+        List<UserProject> users = userService.getAllUsers();
+        return ResponseEntity.ok().body(users.stream().map(UserMapper::userToUserViewDto).toList());
 }
 
 @GetMapping("/{id}")
     public ResponseEntity<UserViewDto> getUserById(@PathVariable int id) {
     System.out.println(id);
-    UserViewDto userViewDto = userService.getUserViewById(id);
-    return ResponseEntity.ok().body(userViewDto);
+    UserProject userProject = userService.getUserById(id);
+    if (userProject != null) {
+        return ResponseEntity.ok().body(UserMapper.userToUserViewDto(userProject));
+    }
+    return ResponseEntity.notFound().build();
 }
 
-@PostMapping("")
+@PostMapping
     public ResponseEntity<UserViewDto> createUser(@RequestBody UserCreationDto newUser) {
 
     UserProject user = userService.createNewUser(newUser);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
     return ResponseEntity.created(uri).build();
+}
+
+@PutMapping("/{id}")
+    public ResponseEntity<UserViewDto> updateUser(@PathVariable int id, @RequestBody UserEditDto updateUser) {
+    UserProject user = userService.updateUser(id,updateUser);
+    return ResponseEntity.ok().body(UserMapper.userToUserViewDto(user));
+
 }
 
 }
