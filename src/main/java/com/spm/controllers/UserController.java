@@ -34,10 +34,7 @@ private final UserService userService;
     public ResponseEntity<UserViewDto> getUserById(@PathVariable int id) {
     System.out.println(id);
     UserProject userProject = userService.getUserById(id);
-    if (userProject != null) {
-        return ResponseEntity.ok().body(UserMapper.userToUserViewDto(userProject));
-    }
-    return ResponseEntity.notFound().build();
+    return ResponseEntity.ok().body(UserMapper.userToUserViewDto(userProject));
 }
 
 @PostMapping

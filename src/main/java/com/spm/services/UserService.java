@@ -32,8 +32,8 @@ public class UserService {
     }
 
     public UserProject getUserById(int id) {
-        Optional<UserProject> user = userRepository.findById(id);
-        return user.orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow( ()-> new ResourceNotFound("Resurs nije pronađen"));
     }
 
     public UserProject updateUser(int id, UserEditDto updateUser) {
