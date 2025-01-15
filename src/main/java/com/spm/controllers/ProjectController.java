@@ -39,4 +39,16 @@ public class ProjectController {
         return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable Integer id, @RequestBody Project project){
+        Project updatedProject = projectService.updateProject(id, project);
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Integer id){
+        projectService.deleteProject(id);
+        return ResponseEntity.noContent().build(); //return 204 - no content on successful deletion
+    }
+
 }
