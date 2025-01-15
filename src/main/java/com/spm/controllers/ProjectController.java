@@ -3,6 +3,7 @@ package com.spm.controllers;
 import com.spm.models.Project;
 import com.spm.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,12 @@ public class ProjectController {
     public ResponseEntity<Project> getProjectById(@PathVariable Integer id){
         Optional<Project> project = projectService.getProjectById(id);
         return project.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Project> createProject(@RequestBody Project project){
+        Project createdProject = projectService.createProject(project);
+        return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
 
 }
