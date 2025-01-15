@@ -45,4 +45,8 @@ public class UserService {
         user.setAge(updateUser.age());
         return userRepository.save(user);
     }
+
+    public void deleteUserById(int id) {
+        userRepository.deleteById(id);
+    }
 }
