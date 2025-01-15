@@ -5,6 +5,7 @@ import com.spm.dtos.user.UserCreationDto;
 import com.spm.dtos.user.UserEditDto;
 import com.spm.dtos.user.UserViewDto;
 import com.spm.mappers.user.UserMapper;
+import com.spm.models.Project;
 import com.spm.models.UserProject;
 import com.spm.services.UserService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +39,11 @@ private final UserService userService;
     UserProject userProject = userService.getUserById(id);
     return ResponseEntity.ok().body(UserMapper.userToUserViewDto(userProject));
 }
+@GetMapping("/{id}/projects")
+    public ResponseEntity<Set<Project>> getProjectsByUserId(@PathVariable int id) {
+        UserProject userProject = userService.getUserById(id);
+        return ResponseEntity.ok().body(userProject.getProjects());
+    }
 
 @PostMapping
     public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreationDto newUser) {

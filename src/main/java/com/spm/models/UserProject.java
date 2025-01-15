@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -25,5 +28,13 @@ public class UserProject {
 
     @Column(name = "age", nullable = false)
     private Integer age;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "project_user",
+            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "projectid",referencedColumnName = "projectid")
+    )
+    private Set<Project> projects = new HashSet<>();
 
 }
