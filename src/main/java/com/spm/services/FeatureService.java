@@ -1,19 +1,21 @@
 package com.spm.services;
 
+import com.spm.exceptions.ResourceNotFound;
 import com.spm.models.Feature;
 import com.spm.repositories.FeatureRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class FeatureService {
     private final FeatureRepository featureRepository;
+    //private final ProjectRepository projectRepository;
 
     public FeatureService(FeatureRepository featureRepository) {
         this.featureRepository = featureRepository;
+        //this.projectRepository = projectRepository;
     }
 
     public Feature createFeature(Feature feature) {
@@ -36,8 +38,16 @@ public class FeatureService {
                     feature.setDeadline(updatedFeature.getDeadline());
                     feature.setProjectid(updatedFeature.getProjectid());
                     return featureRepository.save(feature);
-                }).orElseThrow(() -> new NoSuchElementException("Feature not found"));
+                }).orElseThrow(() -> new ResourceNotFound("Feature not found"));
     }
+    /*public FeatureViewDto createFeature(FeatureCreationDto featureDto) {
+        Project project = projectRepository.findById(featureDto.projectId())
+                .orElseThrow(() -> new NoSuchElementException("Project not found"));
+
+        Feature feature = FeatureMapper.featureCreationToFeature(featureDto, project);
+        Feature savedFeature = featureRepository.save(feature);
+        return FeatureMapper.featureToFeatureViewDto(savedFeature);
+    }*/
     public void deleteFeature(Integer id) {
         featureRepository.deleteById(id);
     }

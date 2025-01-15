@@ -2,9 +2,10 @@ package com.spm.dtos;
 
 import java.time.LocalDate;
 
-public record FeatureCreationDto(
+public record FeatureViewDto(
+        Integer id,
         String name,
         String description,
         LocalDate deadline,
-        Integer projectId
+        String projectName
 ) {}

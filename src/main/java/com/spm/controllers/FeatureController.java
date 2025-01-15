@@ -1,5 +1,7 @@
 package com.spm.controllers;
 
+import com.spm.dtos.FeatureCreationDto;
+import com.spm.dtos.FeatureViewDto;
 import com.spm.models.Feature;
 import com.spm.services.FeatureService;
 import org.springframework.http.HttpStatus;
@@ -17,8 +19,8 @@ public class FeatureController {
         this.featureService = featureService;
     }
     @PostMapping
-    public ResponseEntity<Feature> createFeature(@RequestBody Feature feature) {
-        return new ResponseEntity<>(featureService.createFeature(feature), HttpStatus.CREATED);
+    public ResponseEntity<FeatureViewDto> createFeature(@RequestBody FeatureCreationDto featureDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(featureService.createFeature(featureDto));
     }
 
     @GetMapping
