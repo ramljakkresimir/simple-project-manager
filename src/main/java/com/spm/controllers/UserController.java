@@ -7,6 +7,7 @@ import com.spm.dtos.user.UserViewDto;
 import com.spm.mappers.user.UserMapper;
 import com.spm.models.UserProject;
 import com.spm.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ private final UserService userService;
 }
 
 @PostMapping
-    public ResponseEntity<UserViewDto> createUser(@RequestBody UserCreationDto newUser) {
+    public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreationDto newUser) {
 
     UserProject user = userService.createNewUser(newUser);
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
@@ -47,7 +48,7 @@ private final UserService userService;
 }
 
 @PutMapping("/{id}")
-    public ResponseEntity<UserViewDto> updateUser(@PathVariable int id, @RequestBody UserEditDto updateUser) {
+    public ResponseEntity<UserViewDto> updateUser(@PathVariable int id,@Valid @RequestBody UserEditDto updateUser) {
     UserProject user = userService.updateUser(id,updateUser);
     return ResponseEntity.ok().body(UserMapper.userToUserViewDto(user));
 
