@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Feature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "featurseid", nullable = false)
+    @Column(name = "featureid", nullable = false)
     private Integer id;
 
     @Column(name = "name", nullable = false, length = 40)
