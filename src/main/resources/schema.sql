@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS equipment (
                                          name VARCHAR(40) NOT NULL,
                                          price FLOAT NOT NULL,
                                          weight FLOAT NOT NULL,
+                                         quantity INT NOT NULL,
                                          PRIMARY KEY (eqID)
 );
 
