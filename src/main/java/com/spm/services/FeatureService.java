@@ -1,9 +1,9 @@
 package com.spm.services;
 
-import com.spm.dtos.FeatureCreationDto;
-import com.spm.dtos.FeatureViewDto;
+import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.exceptions.ResourceNotFound;
-import com.spm.mappers.FeatureMapper;
+import com.spm.mappers.feature.FeatureMapper;
 import com.spm.models.Feature;
 import com.spm.models.Project;
 import com.spm.repositories.FeatureRepository;

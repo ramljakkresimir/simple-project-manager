@@ -1,7 +1,7 @@
-package com.spm.mappers;
+package com.spm.mappers.feature;
 
-import com.spm.dtos.FeatureCreationDto;
-import com.spm.dtos.FeatureViewDto;
+import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.models.Feature;
 import com.spm.models.Project;
 import org.springframework.stereotype.Component;

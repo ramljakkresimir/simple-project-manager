@@ -1,8 +1,8 @@
 package com.spm.controllers;
 
-import com.spm.dtos.FeatureCreationDto;
-import com.spm.dtos.FeatureViewDto;
-import com.spm.mappers.FeatureMapper;
+import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.mappers.feature.FeatureMapper;
 import com.spm.services.FeatureService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
