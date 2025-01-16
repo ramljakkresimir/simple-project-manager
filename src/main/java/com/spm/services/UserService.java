@@ -2,23 +2,18 @@ package com.spm.services;
 
 import com.spm.dtos.user.UserCreationDto;
 import com.spm.dtos.user.UserEditDto;
-import com.spm.dtos.user.UserViewDto;
 import com.spm.exceptions.ResourceNotFound;
 import com.spm.mappers.user.UserMapper;
 import com.spm.models.UserProject;
 import com.spm.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements IUserService{
 
     private UserRepository userRepository;
 
