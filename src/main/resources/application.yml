@@ -15,3 +15,11 @@ spring:
   sql:
     init:
       mode: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    enabled: true
+
