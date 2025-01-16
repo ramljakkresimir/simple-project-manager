@@ -1,6 +1,5 @@
 package com.spm.services;
 
-import com.spm.models.UserProject;
 import com.spm.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

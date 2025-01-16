@@ -1,10 +1,14 @@
 package com.spm.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -17,24 +21,32 @@ public class UserProject {
     @Column(name = "userid", nullable = false)
     private Integer id;
 
+    @Size(max = 40)
+    @NotNull
     @Column(name = "username", nullable = false, length = 40)
     private String username;
 
+    @Size(max = 40)
+    @NotNull
     @Column(name = "name", nullable = false, length = 40)
     private String name;
 
+    @Size(max = 40)
+    @NotNull
     @Column(name = "surname", nullable = false, length = 40)
     private String surname;
 
+    @NotNull
     @Column(name = "age", nullable = false)
     private Integer age;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_user",
             joinColumns = @JoinColumn(name = "userid", referencedColumnName = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "projectid",referencedColumnName = "projectid")
+            inverseJoinColumns = @JoinColumn(name = "projectid", referencedColumnName = "projectid")
     )
-    private Set<Project> projects = new HashSet<>();
+    @JsonIgnore
+    private Set<Project> projects = new LinkedHashSet<>();
 
 }
