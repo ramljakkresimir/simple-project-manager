@@ -26,7 +26,7 @@ public class FeatureService {
     }
 
     public FeatureViewDto createFeature(FeatureCreationDto featureDto) {
-        Project project = projectRepository.findById(featureDto.projectId())
+        Project project = projectRepository.findById(Long.valueOf(featureDto.projectId()))
                 .orElseThrow(() -> new ResourceNotFound("Project not found"));
 
         Feature feature = featureMapper.toEntity(featureDto, project);
@@ -43,7 +43,7 @@ public class FeatureService {
     }
 
     public FeatureViewDto updateFeature(Integer id, FeatureCreationDto updatedFeatureDto) {
-        Project project = projectRepository.findById(updatedFeatureDto.projectId())
+        Project project = projectRepository.findById(Long.valueOf(updatedFeatureDto.projectId()))
                 .orElseThrow(() -> new ResourceNotFound("Project not found"));
 
         Feature updatedFeature = featureRepository.findById(id)
