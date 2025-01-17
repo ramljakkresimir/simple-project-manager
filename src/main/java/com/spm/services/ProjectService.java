@@ -1,8 +1,11 @@
 package com.spm.services;
 
+import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.exceptions.ResourceNotFound;
+import com.spm.mappers.feature.FeatureMapper;
+import com.spm.models.Equipment;
 import com.spm.models.Feature;
 import com.spm.models.Project;
-import com.spm.models.Equipment;
 import com.spm.models.UserProject;
 import com.spm.repositories.EquipmentRepository;
 import com.spm.repositories.FeatureRepository;
@@ -10,15 +13,10 @@ import com.spm.repositories.ProjectRepository;
 import com.spm.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import com.spm.services.FeatureService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class ProjectService {
@@ -27,13 +25,15 @@ public class ProjectService {
     private final FeatureRepository featureRepository;
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
+    private final FeatureMapper featureMapper;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, FeatureService featureService, EquipmentRepository equipmentRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, FeatureService featureService, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
         this.projectRepository = projectRepository;
         this.featureRepository = featureRepository;
         this.equipmentRepository = equipmentRepository;
         this.userRepository = userRepository;
+        this.featureMapper = featureMapper;
     }
 
     public List<Project> getAllProjects(){
@@ -113,6 +113,14 @@ public class ProjectService {
         }
 
         return Optional.empty();
+    }
+    public List<FeatureViewDto> getFeaturesByProject(Integer projectId) {
+        Project project = projectRepository.findById(Long.valueOf(projectId))
+                .orElseThrow(() -> new ResourceNotFound("Project not found with id " + projectId));
+
+        return project.getFeatures().stream()
+                .map(featureMapper::toDto)
+                .toList();
     }
 
     public void deleteProject(Integer id){

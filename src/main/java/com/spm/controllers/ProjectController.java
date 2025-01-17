@@ -1,16 +1,14 @@
 package com.spm.controllers;
 
+import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.models.Equipment;
 import com.spm.models.Feature;
 import com.spm.models.Project;
-import com.spm.models.Equipment;
 import com.spm.models.UserProject;
-
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
-
 import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +44,11 @@ public class ProjectController {
     public ResponseEntity<Project> getProjectById(@PathVariable Integer id){
         Optional<Project> project = projectService.getProjectById(id);
         return project.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/{id}/features")
+    public ResponseEntity<List<FeatureViewDto>> getFeaturesByProject(@PathVariable Integer id) {
+        List<FeatureViewDto> featureDtos = projectService.getFeaturesByProject(id);
+        return ResponseEntity.ok(featureDtos);
     }
 
     @PostMapping
