@@ -85,14 +85,9 @@ public class ProjectService {
         if (existingProject.isPresent() && existingEquipment.isPresent()) {
             Project project = existingProject.get();
             Equipment equipment = existingEquipment.get();
-
-            // Add the equipment to the project's equipment set
+            
             project.getEquipment().add(equipment);
-
-            // Add the project to the equipment's project set
             equipment.getProjects().add(project);
-
-            // Save both entities to update the relationship
             projectRepository.save(project);
             equipmentRepository.save(equipment);
 
