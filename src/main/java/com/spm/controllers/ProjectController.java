@@ -46,11 +46,6 @@ public class ProjectController {
         Optional<Project> project = projectService.getProjectById(id);
         return project.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    @GetMapping("/{id}/features")
-    public ResponseEntity<List<FeatureViewDto>> getFeaturesByProject(@PathVariable Integer id) {
-        List<FeatureViewDto> featureDtos = projectService.getFeaturesByProject(id);
-        return ResponseEntity.ok(featureDtos);
-    }
 
     @PostMapping
     public ResponseEntity<Project> createProject(@RequestBody Project project){
@@ -113,6 +108,12 @@ public class ProjectController {
         } catch (RuntimeException ex) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/{id}/features")
+    public ResponseEntity<List<FeatureViewDto>> getFeaturesByProject(@PathVariable Integer id) {
+        List<FeatureViewDto> featureDtos = projectService.getFeaturesByProject(id);
+        return ResponseEntity.ok(featureDtos);
     }
 
 }
