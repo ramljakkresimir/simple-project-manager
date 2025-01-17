@@ -9,6 +9,7 @@ import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,6 +93,26 @@ public class ProjectController {
     public ResponseEntity<Void> deleteProject(@PathVariable Integer id){
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build(); //return 204 - no content on successful deletion
+    }
+
+    @GetMapping("/{id}/getEquipment")
+    public ResponseEntity<List<Equipment>> getEquipmentByProjectId(@PathVariable Long id) {
+        try {
+            List<Equipment> equipmentList = projectService.getAllEquipmentByProjectId(id);
+            return new ResponseEntity<>(equipmentList, HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("{id}/getUsers")
+    public ResponseEntity<List<UserProject>> getUsersByProjectId(@PathVariable Long id) {
+        try {
+            List<UserProject> userList = projectService.getAllUsersByProjectId(id);
+            return new ResponseEntity<>(userList, HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
