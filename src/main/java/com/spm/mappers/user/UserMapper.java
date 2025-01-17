@@ -14,7 +14,7 @@ public class UserMapper {
     private UserRepository userRepository;
 
     public static UserViewDto userToUserViewDto(UserProject user) {
-        return new UserViewDto(user.getUsername(), user.getName(), user.getSurname(), user.getAge());
+        return new UserViewDto(user.getId(), user.getUsername(), user.getName(), user.getSurname(), user.getAge());
     }
 
     public static UserProject userCreationToUserProject(UserCreationDto userDto) {
