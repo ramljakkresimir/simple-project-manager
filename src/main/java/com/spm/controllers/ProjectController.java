@@ -2,6 +2,7 @@ package com.spm.controllers;
 
 import com.spm.models.Feature;
 import com.spm.models.Project;
+import com.spm.models.Equipment;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.services.FeatureService;
@@ -21,17 +22,15 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final FeatureService featureService;
-    private final ProjectRepository projectRepository;
     private final FeatureRepository featureRepository;
 
     @Autowired
     public ProjectController(ProjectService projectService, FeatureService featureService,
                              ProjectRepository projectRepository,
-                             FeatureRepository featureRepository) {
+                             FeatureRepository featureRepository, FeatureRepository featureRepository1) {
         this.projectService = projectService;
         this.featureService = featureService;
-        this.projectRepository = projectRepository;
-        this.featureRepository = featureRepository;
+        this.featureRepository = featureRepository1;
     }
 
     @GetMapping
@@ -51,24 +50,20 @@ public class ProjectController {
         return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
 
-    //assigns existing feature to a project
     @PostMapping("/{id}/features")
-    public ResponseEntity<Project> addFeatureToProject(@RequestBody Integer feature_id, @PathVariable Integer id){
-        Optional<Feature> exsistingFeature = featureService.getFeatureById(feature_id);
-        Optional<Project> existingProject = projectService.getProjectById(id);
+    public ResponseEntity<Feature> addFeatureToProject(@PathVariable Integer id, @RequestBody Integer featureId) {
+        Optional<Feature> addedFeature = projectService.addFeature(id, featureId);
+        return addedFeature.map(feature -> new ResponseEntity<>(feature, HttpStatus.OK)) //return feature
+                .orElse(ResponseEntity.notFound().build()); //return 404
+    }
 
-        if(existingProject.isPresent() && exsistingFeature.isPresent()){
-            System.out.println(id);
-            System.out.println(feature_id);
-            Project project = existingProject.get();
-            Feature feature = exsistingFeature.get();
-
-            feature.setProjectid(project);
-            featureRepository.save(feature);
-        }
-
-        return ResponseEntity.noContent().build();
-
+    @PostMapping("/{id}/equipment")
+    public ResponseEntity<Equipment> addEquipmentToProject(@PathVariable Integer id, @RequestBody Integer equipmentId) {
+        Optional<Equipment> addedEquipment = projectService.addEquipment(id, equipmentId);
+        System.out.println(id);
+        System.out.println(equipmentId);
+        return addedEquipment.map(equipment -> new ResponseEntity<>(equipment, HttpStatus.OK))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
