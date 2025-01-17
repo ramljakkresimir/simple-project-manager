@@ -62,8 +62,8 @@ public class ProjectController {
         Optional<Equipment> addedEquipment = projectService.addEquipment(id, equipmentId);
         System.out.println(id);
         System.out.println(equipmentId);
-        return addedEquipment.map(equipment -> new ResponseEntity<>(equipment, HttpStatus.OK))
-                .orElse(ResponseEntity.notFound().build());
+        return addedEquipment.map(equipment -> new ResponseEntity<>(equipment, HttpStatus.OK)) //return eq
+                .orElse(ResponseEntity.notFound().build()); //reutrn 404
     }
 
     @PutMapping("/{id}")

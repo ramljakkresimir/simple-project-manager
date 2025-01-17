@@ -85,7 +85,7 @@ public class ProjectService {
         if (existingProject.isPresent() && existingEquipment.isPresent()) {
             Project project = existingProject.get();
             Equipment equipment = existingEquipment.get();
-            
+
             project.getEquipment().add(equipment);
             equipment.getProjects().add(project);
             projectRepository.save(project);
