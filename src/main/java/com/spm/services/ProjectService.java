@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,4 +123,15 @@ public class ProjectService {
         projectRepository.deleteById(Long.valueOf(id));
     }
 
+    public List<Equipment> getAllEquipmentByProjectId(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+        return new ArrayList<>(project.getEquipment());
+    }
+
+    public List<UserProject> getAllUsersByProjectId(Long projectId){
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+        return new ArrayList<>(project.getUsers());
+    }
 }
