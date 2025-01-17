@@ -3,10 +3,14 @@ package com.spm.controllers;
 import com.spm.models.Feature;
 import com.spm.models.Project;
 import com.spm.models.Equipment;
+import com.spm.models.UserProject;
+
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
+
 import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +67,16 @@ public class ProjectController {
         System.out.println(id);
         System.out.println(equipmentId);
         return addedEquipment.map(equipment -> new ResponseEntity<>(equipment, HttpStatus.OK)) //return eq
-                .orElse(ResponseEntity.notFound().build()); //reutrn 404
+                .orElse(ResponseEntity.notFound().build()); //return 404
+    }
+
+    @PostMapping("/{id}/users")
+    public ResponseEntity<UserProject> addUserToProject(@PathVariable Integer id, @RequestBody Integer userId) {
+        Optional<UserProject> addedUser = projectService.addUser(id, userId);
+        System.out.println(id);
+        System.out.println(userId);
+        return addedUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)) //return user
+                .orElse(ResponseEntity.notFound().build()); //return 404
     }
 
     @PutMapping("/{id}")

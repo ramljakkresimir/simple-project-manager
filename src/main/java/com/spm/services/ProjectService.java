@@ -3,9 +3,11 @@ package com.spm.services;
 import com.spm.models.Feature;
 import com.spm.models.Project;
 import com.spm.models.Equipment;
+import com.spm.models.UserProject;
 import com.spm.repositories.EquipmentRepository;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
+import com.spm.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +26,15 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final FeatureRepository featureRepository;
     private final EquipmentRepository equipmentRepository;
-
-    private final FeatureService featureService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, FeatureService featureService, EquipmentService equipmentService, EquipmentRepository equipmentRepository) {
+    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, FeatureService featureService, EquipmentRepository equipmentRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.featureRepository = featureRepository;
-
-        this.featureService = featureService;
         this.equipmentRepository = equipmentRepository;
+        this.userRepository = userRepository;
     }
-
 
     public List<Project> getAllProjects(){
         return projectRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); //keep projects sorted by id
@@ -64,7 +63,7 @@ public class ProjectService {
 
     public Optional<Feature> addFeature(Integer projectId, Integer featureId) {
         Optional<Project> existingProject = projectRepository.findById(Long.valueOf(projectId));
-        Optional<Feature> existingFeature = featureService.getFeatureById(featureId);
+        Optional<Feature> existingFeature = featureRepository.findById(featureId);
 
         if (existingProject.isPresent() && existingFeature.isPresent()) {
             Project project = existingProject.get();
@@ -97,7 +96,24 @@ public class ProjectService {
         return Optional.empty();
     }
 
+    public Optional<UserProject> addUser(Integer projectId, Integer userId) {
+        Optional<Project> existingProject = projectRepository.findById(Long.valueOf(projectId));
+        Optional<UserProject> existingUser = userRepository.findById(userId);
 
+        if (existingProject.isPresent() && existingUser.isPresent()) {
+            Project project = existingProject.get();
+            UserProject user = existingUser.get();
+            project.getUsers().add(user);
+            user.getProjects().add(project);
+
+            projectRepository.save(project);
+            userRepository.save(user);
+
+            return Optional.of(user);
+        }
+
+        return Optional.empty();
+    }
 
     public void deleteProject(Integer id){
         if(!projectRepository.existsById(Long.valueOf(id))){
