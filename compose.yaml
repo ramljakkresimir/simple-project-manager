@@ -16,8 +16,12 @@ services:
       context: .
       dockerfile: Dockerfile
     image: ogcs_manager
+    environment:
+      -SPRING_PROFILES_ACTIVE : docker
     depends_on:
       - postgres
+    ports:
+      - '8081:8080'
 
 
 volumes:

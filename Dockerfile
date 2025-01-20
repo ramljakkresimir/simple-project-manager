@@ -1,12 +1,15 @@
 #stage 1 build
 
-FROM amazoncorretto:8u432-al2023 AS build
+FROM eclipse-temurin:latest AS build
 WORKDIR /app
 
-RUN yum update -y && yum install -y findutils
+RUN apt-get update && apt-get install -y findutils
 
 #layer 1
-COPY build.gradle settings.gradle gradlew.bat gradlew gradle/ ./
+COPY build.gradle settings.gradle gradlew.bat gradlew ./
+COPY gradle gradle
+RUN ls
+RUN ls gradle
 RUN chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
 
@@ -16,7 +19,7 @@ RUN ./gradlew bootJar --no-daemon
 
 #stage 2 run
 
-FROM amazoncorretto:8u432-al2023-jre
+FROM eclipse-temurin:latest
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 CMD ["java","-jar","app.jar"]
