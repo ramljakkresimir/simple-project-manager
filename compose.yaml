@@ -11,5 +11,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  ogcsManager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ogcs_manager
+    depends_on:
+      - postgres
+
+
 volumes:
   postgres_data:
