@@ -5,18 +5,13 @@ import com.spm.models.Equipment;
 import com.spm.models.Feature;
 import com.spm.models.Project;
 import com.spm.models.UserProject;
-import com.spm.repositories.FeatureRepository;
-import com.spm.repositories.ProjectRepository;
-import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -24,16 +19,9 @@ import java.util.Optional;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final FeatureService featureService;
-    private final FeatureRepository featureRepository;
 
-    @Autowired
-    public ProjectController(ProjectService projectService, FeatureService featureService,
-                             ProjectRepository projectRepository,
-                             FeatureRepository featureRepository, FeatureRepository featureRepository1) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.featureService = featureService;
-        this.featureRepository = featureRepository1;
     }
 
     @GetMapping
@@ -42,9 +30,13 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Integer id){
-        Optional<Project> project = projectService.getProjectById(id);
-        return project.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Project> getProjectById(@PathVariable Integer id) {
+        try {
+            Project project = projectService.getProjectById(id);
+            return ResponseEntity.ok(project);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build(); //return 404 if the project is not found
+        }
     }
 
     @PostMapping
@@ -55,27 +47,39 @@ public class ProjectController {
 
     @PostMapping("/{id}/features")
     public ResponseEntity<Feature> addFeatureToProject(@PathVariable Integer id, @RequestBody Integer featureId) {
-        Optional<Feature> addedFeature = projectService.addFeature(id, featureId);
-        return addedFeature.map(feature -> new ResponseEntity<>(feature, HttpStatus.OK)) //return feature
-                .orElse(ResponseEntity.notFound().build()); //return 404
+        Feature addedFeature = projectService.addFeature(id, featureId);
+
+        if (addedFeature != null) {
+            return new ResponseEntity<>(addedFeature, HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}/equipment")
     public ResponseEntity<Equipment> addEquipmentToProject(@PathVariable Integer id, @RequestBody Integer equipmentId) {
-        Optional<Equipment> addedEquipment = projectService.addEquipment(id, equipmentId);
+        Equipment addedEquipment = projectService.addEquipment(id, equipmentId);
         System.out.println(id);
         System.out.println(equipmentId);
-        return addedEquipment.map(equipment -> new ResponseEntity<>(equipment, HttpStatus.OK)) //return eq
-                .orElse(ResponseEntity.notFound().build()); //return 404
+
+        if (addedEquipment != null) {
+            return new ResponseEntity<>(addedEquipment, HttpStatus.OK); //return the added equipment
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/{id}/users")
     public ResponseEntity<UserProject> addUserToProject(@PathVariable Integer id, @RequestBody Integer userId) {
-        Optional<UserProject> addedUser = projectService.addUser(id, userId);
+        UserProject addedUser = projectService.addUser(id, userId);
         System.out.println(id);
         System.out.println(userId);
-        return addedUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)) //return user
-                .orElse(ResponseEntity.notFound().build()); //return 404
+
+        if (addedUser != null) {
+            return new ResponseEntity<>(addedUser, HttpStatus.OK); //return the added user
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")

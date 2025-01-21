@@ -29,7 +29,7 @@ public class ProjectService {
     private final FeatureMapper featureMapper;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, FeatureService featureService, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
+    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
         this.projectRepository = projectRepository;
         this.featureRepository = featureRepository;
         this.equipmentRepository = equipmentRepository;
@@ -41,9 +41,9 @@ public class ProjectService {
         return projectRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); //keep projects sorted by id
     }
 
-    public Optional<Project> getProjectById(Integer id){
-        return Optional.ofNullable(projectRepository.findById(Long.valueOf(id)).
-                orElseThrow(() -> new RuntimeException("Project not found with ID: " + id)));
+    public Project getProjectById(Integer id) {
+        return projectRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
     }
 
     public Project createProject(Project project){
@@ -62,7 +62,7 @@ public class ProjectService {
                 }).orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
     }
 
-    public Optional<Feature> addFeature(Integer projectId, Integer featureId) {
+    public Feature addFeature(Integer projectId, Integer featureId) {
         Optional<Project> existingProject = projectRepository.findById(Long.valueOf(projectId));
         Optional<Feature> existingFeature = featureRepository.findById(featureId);
 
@@ -71,14 +71,13 @@ public class ProjectService {
             Feature feature = existingFeature.get();
 
             feature.setProjectid(project);
-            Feature savedFeature = featureRepository.save(feature);
-            return Optional.of(savedFeature);
+            return featureRepository.save(feature);
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    public Optional<Equipment> addEquipment(Integer projectId, Integer equipmentId) {
+    public Equipment addEquipment(Integer projectId, Integer equipmentId) {
         Optional<Project> existingProject = projectRepository.findById(Long.valueOf(projectId));
         Optional<Equipment> existingEquipment = equipmentRepository.findById(Long.valueOf(equipmentId));
 
@@ -91,30 +90,32 @@ public class ProjectService {
             projectRepository.save(project);
             equipmentRepository.save(equipment);
 
-            return Optional.of(equipment);
+            return equipment;
         }
 
-        return Optional.empty();
+        return null;
     }
 
-    public Optional<UserProject> addUser(Integer projectId, Integer userId) {
+    public UserProject addUser(Integer projectId, Integer userId) {
         Optional<Project> existingProject = projectRepository.findById(Long.valueOf(projectId));
         Optional<UserProject> existingUser = userRepository.findById(userId);
 
         if (existingProject.isPresent() && existingUser.isPresent()) {
             Project project = existingProject.get();
             UserProject user = existingUser.get();
+
             project.getUsers().add(user);
             user.getProjects().add(project);
 
             projectRepository.save(project);
             userRepository.save(user);
 
-            return Optional.of(user);
+            return user;
         }
 
-        return Optional.empty();
+        return null;
     }
+
     public List<FeatureViewDto> getFeaturesByProject(Integer projectId) {
         Project project = projectRepository.findById(Long.valueOf(projectId))
                 .orElseThrow(() -> new ResourceNotFound("Project not found with id " + projectId));

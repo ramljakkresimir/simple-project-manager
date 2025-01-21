@@ -38,8 +38,9 @@ public class FeatureService {
         return featureRepository.findAll();
     }
 
-    public Optional<Feature> getFeatureById(Integer id) {
-        return featureRepository.findById(id);
+    public Feature getFeatureById(Integer id) {
+        return featureRepository.findById(id)
+                .orElse(null);
     }
 
     public FeatureViewDto updateFeature(Integer id, FeatureCreationDto updatedFeatureDto) {

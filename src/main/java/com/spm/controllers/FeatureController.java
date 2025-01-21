@@ -1,5 +1,7 @@
 package com.spm.controllers;
 
+import com.spm.models.Feature;
+
 import com.spm.dtos.feature.FeatureCreationDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.mappers.feature.FeatureMapper;
@@ -37,10 +39,13 @@ public class FeatureController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FeatureViewDto> getFeatureById(@PathVariable Integer id) {
-        return featureService.getFeatureById(id)
-                .map(featureMapper::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Feature feature = featureService.getFeatureById(id);
+
+        if (feature != null) {
+            return ResponseEntity.ok(featureMapper.toDto(feature)); //map and return the feature DTO
+        } else {
+            return ResponseEntity.notFound().build(); //return 404 if the feature is not found
+        }
     }
 
     @PutMapping("/{id}")
