@@ -3,6 +3,7 @@ package com.spm.controllers;
 import com.spm.dtos.feature.FeatureCreationDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.mappers.feature.FeatureMapper;
+import com.spm.models.Feature;
 import com.spm.services.FeatureService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,16 +38,31 @@ public class FeatureController {
 
     @GetMapping("/{id}")
     public ResponseEntity<FeatureViewDto> getFeatureById(@PathVariable Integer id) {
-        return featureService.getFeatureById(id)
-                .map(featureMapper::toDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Feature feature = featureService.getFeatureById(id);
+        FeatureViewDto featureDto = featureMapper.toDto(feature);
+        return ResponseEntity.ok(featureDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<FeatureViewDto> updateFeature(@PathVariable Integer id, @RequestBody FeatureCreationDto featureDto) {
         FeatureViewDto updatedFeature = featureService.updateFeature(id, featureDto);
         return ResponseEntity.ok(updatedFeature);
+    }
+
+    @PostMapping("/{id}/claim")
+    public ResponseEntity<FeatureViewDto> claimFeature(@PathVariable Integer id, @RequestParam Integer userId ) {
+        FeatureViewDto featureDto = featureService.claimFeature(id,userId);
+        return ResponseEntity.ok(featureDto);
+    }
+
+    @GetMapping("/unclaimed")
+    public ResponseEntity<List<FeatureViewDto>> getUnclaimedFeatures(@RequestParam(required = false) Integer projectId) {
+        List<Feature> unclaimedFeatures = featureService.getUnclaimedFeatures(projectId);
+        List<FeatureViewDto> featureDtos =unclaimedFeatures.stream()
+                .map(featureMapper::toDto)
+                .toList();
+        return ResponseEntity.ok(featureDtos);
+
     }
 
     @DeleteMapping("/{id}")

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -38,5 +37,9 @@ public class Feature {
     @JoinColumn(name = "projectid")
     @JsonIgnore
     private Project projectid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "claimed_by")
+    private UserProject claimedBy;
 
 }
