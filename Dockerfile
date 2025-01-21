@@ -8,8 +8,7 @@ RUN apt-get update && apt-get install -y findutils
 #layer 1
 COPY build.gradle settings.gradle gradlew.bat gradlew ./
 COPY gradle gradle
-RUN ls
-RUN ls gradle
+
 RUN chmod +x gradlew
 RUN ./gradlew dependencies --no-daemon
 
