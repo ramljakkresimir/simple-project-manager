@@ -69,6 +69,11 @@ public class FeatureService {
         return featureRepository.save(feature);
     }
 
+    public List<Feature> getFeaturesDeliveredInTimePeriod(LocalDate startDate, LocalDate endDate) {
+        return featureRepository.findDeliveredFeaturesInTimePeriod(startDate, endDate);
+    }
+
+
     public void deleteFeature(Integer id) {
         if (!featureRepository.existsById(id)) {
             throw new ResourceNotFound("Feature not found");

@@ -33,7 +33,7 @@ public class Feature {
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
 
-    @Column(name = "deliveryDate")
+    @Column(name = "delivery_date")
     private LocalDate deliveryDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.spm.controllers;
 
+import com.spm.dtos.feature.FeatureDateRangeDto;
 import com.spm.models.Feature;
 
 import com.spm.dtos.feature.FeatureCreationDto;
@@ -22,12 +23,6 @@ public class FeatureController {
     public FeatureController(FeatureService featureService, FeatureMapper featureMapper) {
         this.featureService = featureService;
         this.featureMapper = featureMapper;
-    }
-
-    @PostMapping
-    public ResponseEntity<FeatureViewDto> createFeature(@RequestBody FeatureCreationDto featureDto) {
-        FeatureViewDto createdFeature = featureService.createFeature(featureDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFeature);
     }
 
     @GetMapping
@@ -53,6 +48,20 @@ public class FeatureController {
     public ResponseEntity<FeatureViewDto> updateFeature(@PathVariable Integer id, @RequestBody FeatureCreationDto featureDto) {
         FeatureViewDto updatedFeature = featureService.updateFeature(id, featureDto);
         return ResponseEntity.ok(updatedFeature);
+    }
+
+    @PostMapping
+    public ResponseEntity<FeatureViewDto> createFeature(@RequestBody FeatureCreationDto featureDto) {
+        FeatureViewDto createdFeature = featureService.createFeature(featureDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdFeature);
+    }
+
+    @PostMapping("/delivered")
+    public ResponseEntity<List<Feature>> getDeliveredFeaturesWithinDateRange(
+            @RequestBody FeatureDateRangeDto dateRange) {
+        List<Feature> features = featureService.getFeaturesDeliveredInTimePeriod(
+                dateRange.startDate(), dateRange.endDate());
+        return ResponseEntity.ok(features);
     }
 
     @PatchMapping("/{id}/delivery-date")
