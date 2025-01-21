@@ -1,6 +1,7 @@
 package com.spm.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,9 +35,20 @@ public class Feature {
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status",length = 40, nullable = false)
+    //default je not started
+    private FeatureStatus status = FeatureStatus.NOT_STARTED;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid")
     @JsonIgnore
     private Project projectid;
+
+    @Nullable
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    @JsonIgnore
+    private UserProject user;
 
 }
