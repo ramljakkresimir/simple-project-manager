@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -52,6 +53,16 @@ public class FeatureController {
     public ResponseEntity<FeatureViewDto> updateFeature(@PathVariable Integer id, @RequestBody FeatureCreationDto featureDto) {
         FeatureViewDto updatedFeature = featureService.updateFeature(id, featureDto);
         return ResponseEntity.ok(updatedFeature);
+    }
+
+    @PatchMapping("/{id}/delivery-date")
+    public ResponseEntity<Feature> markDeliveryDate(@PathVariable Integer id, @RequestBody LocalDate deliveryDate){
+        try{
+            Feature updatedFeature = featureService.markDeliveryDate(id, deliveryDate);
+            return  ResponseEntity.ok(updatedFeature);
+        }catch (RuntimeException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @DeleteMapping("/{id}")

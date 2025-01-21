@@ -10,6 +10,7 @@ import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,15 @@ public class FeatureService {
                 }).orElseThrow(() -> new ResourceNotFound("Feature not found"));
 
         return featureMapper.toDto(updatedFeature);
+    }
+
+    public Feature markDeliveryDate(Integer featureId, LocalDate deliveryDate){
+        Feature feature = featureRepository.findById(featureId)
+                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
+
+        feature.setDeliveryDate(deliveryDate);
+
+        return featureRepository.save(feature);
     }
 
     public void deleteFeature(Integer id) {

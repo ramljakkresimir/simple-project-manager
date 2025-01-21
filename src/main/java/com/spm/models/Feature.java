@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -33,6 +32,9 @@ public class Feature {
     @NotNull
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
+
+    @Column(name = "deliveryDate")
+    private LocalDate deliveryDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid")

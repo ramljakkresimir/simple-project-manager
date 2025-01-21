@@ -11,7 +11,6 @@ import com.spm.repositories.EquipmentRepository;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,6 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final FeatureMapper featureMapper;
 
-    @Autowired
     public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
         this.projectRepository = projectRepository;
         this.featureRepository = featureRepository;

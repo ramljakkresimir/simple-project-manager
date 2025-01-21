@@ -24,7 +24,8 @@ public class FeatureMapper {
                 feature.getName(),
                 feature.getDescription(),
                 feature.getDeadline(),
-                feature.getProjectid() != null ? feature.getProjectid().getName() : null
+                feature.getProjectid() != null ? feature.getProjectid().getName() : null,
+                feature.getDeliveryDate()
         );
     }
 }

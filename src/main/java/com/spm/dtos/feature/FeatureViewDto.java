@@ -7,5 +7,6 @@ public record FeatureViewDto(
         String name,
         String description,
         LocalDate deadline,
-        String projectName
+        String projectName,
+        LocalDate deliveryDate
 ) {}
