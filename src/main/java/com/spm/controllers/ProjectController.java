@@ -1,10 +1,8 @@
 package com.spm.controllers;
 
 import com.spm.dtos.feature.FeatureViewDto;
-import com.spm.models.Equipment;
-import com.spm.models.Feature;
-import com.spm.models.Project;
-import com.spm.models.UserProject;
+import com.spm.dtos.user.UserFeaturesCountDto;
+import com.spm.models.*;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.services.FeatureService;
@@ -16,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -114,6 +113,16 @@ public class ProjectController {
     public ResponseEntity<List<FeatureViewDto>> getFeaturesByProject(@PathVariable Integer id) {
         List<FeatureViewDto> featureDtos = projectService.getFeaturesByProject(id);
         return ResponseEntity.ok(featureDtos);
+    }
+
+    @GetMapping("/{projectId}/features/group-by-user")
+    public ResponseEntity<List<UserFeaturesCountDto>> sumOfFeaturesPerUserInProject(@PathVariable int projectId) {
+        return ResponseEntity.ok(featureService.getFeaturesSumByUser(projectId));
+    }
+
+    @GetMapping("/{projectId}/features/count/group-by-status")
+    public ResponseEntity<Map<FeatureStatus,List<Feature>>> featuresByStatusInProject(@PathVariable int projectId) {
+        return ResponseEntity.ok(featureService.getFeaturesByStatus(projectId));
     }
 
 }

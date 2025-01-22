@@ -45,6 +45,7 @@ public class FeatureController {
 
     @PutMapping("/{id}")
     public ResponseEntity<FeatureViewDto> updateFeature(@PathVariable Integer id, @RequestBody FeatureCreationDto featureDto) {
+        System.out.println(featureDto);
         FeatureViewDto updatedFeature = featureService.updateFeature(id, featureDto);
         return ResponseEntity.ok(updatedFeature);
     }
