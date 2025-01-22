@@ -7,5 +7,6 @@ public record FeatureCreationDto(
         String description,
         LocalDate deadline,
         Integer projectId,
-        LocalDate deliveryDate
+        LocalDate deliveryDate,
+        Integer PersonDayEstimate
 ) {}

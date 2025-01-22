@@ -74,6 +74,14 @@ public class FeatureService {
         return featureRepository.findDeliveredFeaturesInTimePeriod(startDate, endDate);
     }
 
+    public Feature setPersonDayEstimate(Integer featureId, Integer personDayEstimate){
+        Feature feature = featureRepository.findById(featureId)
+                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
+
+        feature.setPersonDayEstimate(personDayEstimate);
+
+        return featureRepository.save(feature);
+    }
 
     public void deleteFeature(Integer id) {
         if (!featureRepository.existsById(id)) {

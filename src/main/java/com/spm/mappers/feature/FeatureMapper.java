@@ -15,6 +15,7 @@ public class FeatureMapper {
         feature.setDescription(featureCreationDto.description());
         feature.setDeadline(featureCreationDto.deadline());
         feature.setProjectid(project);
+        feature.setPersonDayEstimate(featureCreationDto.PersonDayEstimate());
         return feature;
     }
 
@@ -25,7 +26,8 @@ public class FeatureMapper {
                 feature.getDescription(),
                 feature.getDeadline(),
                 feature.getProjectid() != null ? feature.getProjectid().getName() : null,
-                feature.getDeliveryDate()
+                feature.getDeliveryDate(),
+                feature.getPersonDayEstimate()
         );
     }
 }

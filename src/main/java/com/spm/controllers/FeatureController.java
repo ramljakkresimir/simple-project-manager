@@ -79,6 +79,18 @@ public class FeatureController {
         }
     }
 
+    @PatchMapping("/{id}/estimate")
+    public ResponseEntity<Feature> setPersonDayEstimate(
+            @PathVariable Integer id,
+            @RequestBody Integer personDayEstimate){
+        try{
+            Feature updatedFeature = featureService.setPersonDayEstimate(id, personDayEstimate);
+            return ResponseEntity.ok(updatedFeature);
+        } catch (RuntimeException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFeature(@PathVariable Integer id) {
         featureService.deleteFeature(id);

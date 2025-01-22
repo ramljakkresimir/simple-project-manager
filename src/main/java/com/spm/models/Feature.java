@@ -2,6 +2,7 @@ package com.spm.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
@@ -34,9 +35,13 @@ public class Feature {
     @Column(name = "deadline", nullable = false)
     private LocalDate deadline;
 
-    @Column(name = "delivery_date")
     @PastOrPresent(message = "Delivery date cannot be in the future.")
+    @Column(name = "delivery_date", nullable = true)
     private LocalDate deliveryDate;
+
+    @Min(value = 0, message = "Person-day estimate cannot be negative.")
+    @Column(name = "person_day_estimate", nullable = true)
+    private Integer personDayEstimate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid")
