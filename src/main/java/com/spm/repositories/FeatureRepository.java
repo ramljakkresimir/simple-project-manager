@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface FeatureRepository extends JpaRepository<Feature, Integer> {
-    List<Feature> findByClaimedByIsNull();
+    List<Feature> findByUserIsNull();
 
-    List<Feature> findByClaimedByIsNullAndProjectid_Id(Integer projectId);
+    List<Feature> findByUserIsNullAndProjectid_Id(Integer projectId);
 }

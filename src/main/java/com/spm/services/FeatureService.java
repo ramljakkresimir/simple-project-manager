@@ -66,14 +66,14 @@ public class FeatureService {
     public FeatureViewDto claimFeature(Integer featureId, Integer userId){
         Feature feature = featureRepository.findById(featureId)
                 .orElseThrow(() -> new ResourceNotFound("Feature not found with id " + featureId));
-        if(feature.getClaimedBy() != null) {
+        if(feature.getUser() != null) {
             throw new IllegalStateException("Feature is already claimed by another user");
         }
 
         UserProject user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFound("User not found with id " + userId));
 
-        feature.setClaimedBy(user);
+        feature.setUser(user);
         Feature savedFeature = featureRepository.save(feature);
         return featureMapper.toDto(savedFeature);
 
@@ -81,9 +81,9 @@ public class FeatureService {
 
     public List<Feature> getUnclaimedFeatures(Integer projectId) {
         if(projectId != null) {
-            return featureRepository.findByClaimedByIsNullAndProjectid_Id(projectId);
+            return featureRepository.findByUserIsNullAndProjectid_Id(projectId);
         }
-        return featureRepository.findByClaimedByIsNull();
+        return featureRepository.findByUserIsNull();
     }
 
     public void deleteFeature(Integer id) {

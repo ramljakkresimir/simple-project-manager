@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
 
@@ -38,8 +39,9 @@ public class Feature {
     @JsonIgnore
     private Project projectid;
 
+    @Nullable
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "claimed_by")
-    private UserProject claimedBy;
+    @JoinColumn(name = "userid")
+    private UserProject user;
 
 }
