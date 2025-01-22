@@ -3,6 +3,7 @@ package com.spm.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public class Feature {
     private LocalDate deadline;
 
     @Column(name = "delivery_date")
+    @PastOrPresent(message = "Delivery date cannot be in the future.")
     private LocalDate deliveryDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

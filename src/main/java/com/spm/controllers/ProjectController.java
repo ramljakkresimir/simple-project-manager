@@ -94,7 +94,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build(); //return 204 - no content on successful deletion
     }
 
-    @GetMapping("/{id}/getEquipment")
+    @GetMapping("/{id}/equipment")
     public ResponseEntity<List<Equipment>> getEquipmentByProjectId(@PathVariable Long id) {
         try {
             List<Equipment> equipmentList = projectService.getAllEquipmentByProjectId(id);
@@ -104,7 +104,7 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("{id}/getUsers")
+    @GetMapping("{id}/users")
     public ResponseEntity<List<UserProject>> getUsersByProjectId(@PathVariable Long id) {
         try {
             List<UserProject> userList = projectService.getAllUsersByProjectId(id);

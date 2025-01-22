@@ -8,6 +8,7 @@ import com.spm.models.Feature;
 import com.spm.models.Project;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -60,7 +61,7 @@ public class FeatureService {
         return featureMapper.toDto(updatedFeature);
     }
 
-    public Feature markDeliveryDate(Integer featureId, LocalDate deliveryDate){
+    public Feature markDeliveryDate(Integer featureId, @Valid LocalDate deliveryDate){
         Feature feature = featureRepository.findById(featureId)
                 .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
 
