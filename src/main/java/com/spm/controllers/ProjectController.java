@@ -1,6 +1,7 @@
 package com.spm.controllers;
 
 import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.dtos.project.ProjectBudgetSummaryDTO;
 import com.spm.models.Equipment;
 import com.spm.models.Feature;
 import com.spm.models.Project;
@@ -90,7 +91,7 @@ public class ProjectController {
         return ResponseEntity.noContent().build(); //return 204 - no content on successful deletion
     }
 
-    @GetMapping("/{id}/getEquipment")
+    @GetMapping("/{id}/equipment")
     public ResponseEntity<List<Equipment>> getEquipmentByProjectId(@PathVariable Long id) {
         try {
             List<Equipment> equipmentList = projectService.getAllEquipmentByProjectId(id);
@@ -100,7 +101,7 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("{id}/getUsers")
+    @GetMapping("{id}/users")
     public ResponseEntity<List<UserProject>> getUsersByProjectId(@PathVariable Long id) {
         try {
             List<UserProject> userList = projectService.getAllUsersByProjectId(id);
@@ -116,4 +117,23 @@ public class ProjectController {
         return ResponseEntity.ok(featureDtos);
     }
 
+    ///@GetMapping("/exceeded-budget")
+    ///public ResponseEntity<List<ProjectBudgetSummaryDTO>> getProjectsExceedingBudget() {
+    ///    List<ProjectBudgetSummaryDTO> projects = projectService.getProjectBudgetSummary();
+    ///    return new ResponseEntity<>(projects, HttpStatus.OK);
+   /// }
+
+    @GetMapping("/budget-summary")
+    public ResponseEntity<List<ProjectBudgetSummaryDTO>> getBudgetSummaries(
+            @RequestParam(required = false) Boolean exceededBudget, // Filter by exceeded budget
+            @RequestParam(defaultValue = "id") String sortBy, // Sorting field
+            @RequestParam(defaultValue = "asc") String order, // Sorting order
+            @RequestParam(defaultValue = "0") int page, // Page number
+            @RequestParam(defaultValue = "10") int size // Page size
+    ) {
+        List<ProjectBudgetSummaryDTO> budgetSummaries = projectService.getFilteredBudgetSummaries(
+                exceededBudget, sortBy, order, page, size
+        );
+        return new ResponseEntity<>(budgetSummaries, HttpStatus.OK);
+    }
 }

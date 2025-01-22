@@ -1,5 +1,6 @@
 package com.spm.mappers.project;
 
+import com.spm.dtos.project.ProjectBudgetSummaryDTO;
 import com.spm.dtos.project.ProjectCreationDto;
 import com.spm.dtos.project.ProjectViewDto;
 import com.spm.models.Project;
@@ -28,6 +29,22 @@ public class ProjectMapper {
         project.setBudget((creationDto.budget()));
 
         return project;
+    }
+
+    public ProjectBudgetSummaryDTO toBudgetSummaryDTO(Project project) {
+        Double totalEquipmentCost = project.getEquipment().stream()
+                .mapToDouble(equipment -> equipment.getPrice() * equipment.getQuantity())
+                .sum();
+
+        boolean exceededBudget = totalEquipmentCost > project.getBudget();
+
+        return new ProjectBudgetSummaryDTO(
+                project.getId().longValue(),
+                project.getName(),
+                project.getBudget(),
+                totalEquipmentCost,
+                exceededBudget
+        );
     }
 
 }

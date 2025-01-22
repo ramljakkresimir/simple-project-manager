@@ -2,18 +2,18 @@ package com.spm.services;
 
 import com.spm.models.Equipment;
 import com.spm.repositories.EquipmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 
 import java.util.List;
 
 @Service
 public class EquipmentService {
 
-    @Autowired
-    private EquipmentRepository equipmentRepository;
+    private final EquipmentRepository equipmentRepository;
+
+    public EquipmentService(EquipmentRepository equipmentRepository) {
+        this.equipmentRepository = equipmentRepository;
+    }
 
     public List<Equipment> getAllEquipment() {
         return equipmentRepository.findAll();
@@ -41,8 +41,8 @@ public class EquipmentService {
         equipmentRepository.deleteById(id);
     }
 
-    public List<Equipment> getEquipmentByProjectId(Long projectId) {
-        return equipmentRepository.findByProjectId(projectId);
-    }
+    ///public List<Equipment> getEquipmentByProjectId(Long projectId) {
+    ///    return equipmentRepository.findByProjectId(projectId);
+    ///}
 }
 
