@@ -1,7 +1,5 @@
 package com.spm.controllers;
 
-import com.spm.models.Feature;
-
 import com.spm.dtos.feature.FeatureCreationDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.mappers.feature.FeatureMapper;
@@ -25,11 +23,7 @@ public class FeatureController {
         this.featureMapper = featureMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<FeatureViewDto> createFeature(@RequestBody FeatureCreationDto featureDto) {
-        FeatureViewDto createdFeature = featureService.createFeature(featureDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFeature);
-    }
+   
 
     @GetMapping
     public ResponseEntity<List<FeatureViewDto>> getAllFeatures() {
