@@ -9,6 +9,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
@@ -44,6 +45,11 @@ public class Feature {
     @Column(name = "person_day_estimate", nullable = true)
     private Integer personDayEstimate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status",length = 40, nullable = false)
+    //default je not started
+    private FeatureStatus status = FeatureStatus.NOT_STARTED;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid")
     @JsonIgnore
@@ -52,6 +58,7 @@ public class Feature {
     @Nullable
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
+    @JsonIgnore
     private UserProject user;
 
 }

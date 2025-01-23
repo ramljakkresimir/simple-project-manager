@@ -49,4 +49,6 @@ public class UserProject {
     @JsonIgnore
     private Set<Project> projects = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Set<Feature> features = new LinkedHashSet<>();
 }

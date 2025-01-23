@@ -2,9 +2,11 @@ package com.spm.services;
 
 import com.spm.dtos.feature.FeatureCreationDto;
 import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.dtos.user.UserFeaturesCountDto;
 import com.spm.exceptions.ResourceNotFound;
 import com.spm.mappers.feature.FeatureMapper;
 import com.spm.models.Feature;
+import com.spm.models.FeatureStatus;
 import com.spm.models.Project;
 import com.spm.models.UserProject;
 import com.spm.repositories.FeatureRepository;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FeatureService {
@@ -116,5 +120,21 @@ public class FeatureService {
             throw new ResourceNotFound("Feature not found");
         }
         featureRepository.deleteById(id);
+    }
+
+    public List<UserFeaturesCountDto> getFeaturesSumByUser(int projectId) {
+        Project project = projectRepository.findById((long) projectId)
+                .orElseThrow(()-> new ResourceNotFound("Projekt nije pronađen"));
+        return featureRepository.countFeaturesByUsersInProject(project);
+    }
+
+    public Map<FeatureStatus,List<Feature>> getFeaturesByStatus(int projectId) {
+        Project project = projectRepository.findById((long) projectId)
+                .orElseThrow(()-> new ResourceNotFound("Projekt nije pronađen"));
+        System.out.println(project.getName());
+        return featureRepository.findAllByProjectid(project)
+                .stream()
+                .filter(feature -> feature.getStatus() != null)
+                .collect(Collectors.groupingBy(Feature::getStatus));
     }
 }

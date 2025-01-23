@@ -3,6 +3,7 @@ package com.spm.controllers;
 
 import com.spm.dtos.user.UserCreationDto;
 import com.spm.dtos.user.UserEditDto;
+import com.spm.dtos.user.UserEditPartialDto;
 import com.spm.dtos.user.UserViewDto;
 import com.spm.mappers.user.UserMapper;
 import com.spm.models.UserProject;
@@ -59,6 +60,11 @@ private final UserService userService;
     UserProject user = userService.updateUser(id,updateUser);
     return ResponseEntity.ok().body(UserMapper.userToUserViewDto(user));
 
+}
+@PatchMapping("/{id}")
+public ResponseEntity<UserViewDto> updatePartialUser(@PathVariable int id,@Valid @RequestBody UserEditPartialDto updateUser) {
+    UserProject user = userService.updatePartialUser(id, updateUser);
+    return ResponseEntity.ok().body(UserMapper.userToUserViewDto(user));
 }
 
 @DeleteMapping("/{id}")

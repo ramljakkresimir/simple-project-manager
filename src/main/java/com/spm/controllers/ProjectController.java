@@ -1,17 +1,20 @@
 package com.spm.controllers;
 
 import com.spm.dtos.feature.FeatureViewDto;
-import com.spm.models.Equipment;
-import com.spm.models.Feature;
-import com.spm.models.Project;
-import com.spm.models.UserProject;
+import com.spm.dtos.user.UserFeaturesCountDto;
+import com.spm.models.*;
+import com.spm.repositories.FeatureRepository;
+import com.spm.repositories.ProjectRepository;
+import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @CrossOrigin
@@ -19,9 +22,16 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final FeatureService featureService;
+    private final FeatureRepository featureRepository;
 
-    public ProjectController(ProjectService projectService) {
+    @Autowired
+    public ProjectController(ProjectService projectService, FeatureService featureService,
+                             ProjectRepository projectRepository,
+                             FeatureRepository featureRepository, FeatureRepository featureRepository1) {
         this.projectService = projectService;
+        this.featureService = featureService;
+        this.featureRepository = featureRepository1;
     }
 
     @GetMapping
@@ -118,6 +128,16 @@ public class ProjectController {
     public ResponseEntity<List<FeatureViewDto>> getFeaturesByProject(@PathVariable Integer id) {
         List<FeatureViewDto> featureDtos = projectService.getFeaturesByProject(id);
         return ResponseEntity.ok(featureDtos);
+    }
+
+    @GetMapping("/{projectId}/features/group-by-user")
+    public ResponseEntity<List<UserFeaturesCountDto>> sumOfFeaturesPerUserInProject(@PathVariable int projectId) {
+        return ResponseEntity.ok(featureService.getFeaturesSumByUser(projectId));
+    }
+
+    @GetMapping("/{projectId}/features/count/group-by-status")
+    public ResponseEntity<Map<FeatureStatus,List<Feature>>> featuresByStatusInProject(@PathVariable int projectId) {
+        return ResponseEntity.ok(featureService.getFeaturesByStatus(projectId));
     }
 
 }
