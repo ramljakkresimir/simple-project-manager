@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/features")
@@ -22,8 +23,6 @@ public class FeatureController {
         this.featureService = featureService;
         this.featureMapper = featureMapper;
     }
-
-   
 
     @GetMapping
     public ResponseEntity<List<FeatureViewDto>> getAllFeatures() {
@@ -77,7 +76,6 @@ public class FeatureController {
                 .map(featureMapper::toDto)
                 .toList();
         return ResponseEntity.ok(featureDtos);
-
     }
 
     @PostMapping
@@ -87,23 +85,14 @@ public class FeatureController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Feature> markDeliveryDate(@PathVariable Integer id, @RequestBody LocalDate deliveryDate){
-        try{
-            Feature updatedFeature = featureService.markDeliveryDate(id, deliveryDate);
-            return  ResponseEntity.ok(updatedFeature);
-        }catch (RuntimeException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
-
-    @PatchMapping("/{id}/estimate")
-    public ResponseEntity<Feature> setPersonDayEstimate(
+    public ResponseEntity<Feature> updateFeatureAttributes(
             @PathVariable Integer id,
-            @RequestBody Integer personDayEstimate){
-        try{
-            Feature updatedFeature = featureService.setPersonDayEstimate(id, personDayEstimate);
+            @RequestBody Map<String, Object> updates) {
+        try {
+            Feature updatedFeature = featureService.updateFeatureAttributes(id, updates);
             return ResponseEntity.ok(updatedFeature);
-        } catch (RuntimeException ex){
+
+        } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }

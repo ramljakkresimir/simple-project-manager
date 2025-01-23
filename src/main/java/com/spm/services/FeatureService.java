@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,6 +71,39 @@ public class FeatureService {
 
         return featureMapper.toDto(updatedFeature);
     }
+
+    public Feature updateFeatureAttributes(Integer featureId, Map<String, Object> updates) {
+        Feature feature = featureRepository.findById(featureId)
+                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "deadline":
+                    feature.setDeadline(LocalDate.parse(value.toString()));
+                    break;
+                case "status":
+                    feature.setStatus(FeatureStatus.valueOf(value.toString()));
+                    break;
+                case "description":
+                    feature.setDescription(value.toString());
+                    break;
+                case "name":
+                    feature.setName(value.toString());
+                    break;
+                case "deliveryDate":
+                    feature.setDeliveryDate(LocalDate.parse(value.toString()));
+                    break;
+                case "personDayEstimate":
+                    feature.setPersonDayEstimate(Integer.parseInt(value.toString()));
+                    break;
+                default:
+                    throw new RuntimeException("Invalid field: " + key);
+            }
+        });
+
+        return featureRepository.save(feature);
+    }
+
 
     public FeatureViewDto claimFeature(Integer featureId, Integer userId){
         Feature feature = featureRepository.findById(featureId)
