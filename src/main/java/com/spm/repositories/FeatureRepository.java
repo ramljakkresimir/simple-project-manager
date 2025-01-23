@@ -1,6 +1,8 @@
 package com.spm.repositories;
 
+import com.spm.dtos.user.UserFeaturesCountDto;
 import com.spm.models.Feature;
+import com.spm.models.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
