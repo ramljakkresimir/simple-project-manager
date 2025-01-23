@@ -9,5 +9,6 @@ public record FeatureViewDto(
         LocalDate deadline,
         String projectName,
         LocalDate deliveryDate,
-        Integer PersonDayEstimate
+        Integer PersonDayEstimate,
+        com.spm.models.FeatureStatus status
 ) {}

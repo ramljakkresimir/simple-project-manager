@@ -3,6 +3,7 @@ package com.spm.mappers.feature;
 import com.spm.dtos.feature.FeatureCreationDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.models.Feature;
+import com.spm.models.FeatureStatus;
 import com.spm.models.Project;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ public class FeatureMapper {
         feature.setDeadline(featureCreationDto.deadline());
         feature.setProjectid(project);
         feature.setPersonDayEstimate(featureCreationDto.PersonDayEstimate());
+        feature.setStatus(FeatureStatus.valueOf(featureCreationDto.status()));
         return feature;
     }
 
@@ -27,7 +29,8 @@ public class FeatureMapper {
                 feature.getDeadline(),
                 feature.getProjectid() != null ? feature.getProjectid().getName() : null,
                 feature.getDeliveryDate(),
-                feature.getPersonDayEstimate()
+                feature.getPersonDayEstimate(),
+                feature.getStatus()
         );
     }
 }

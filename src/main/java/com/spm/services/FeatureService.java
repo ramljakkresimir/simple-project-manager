@@ -64,6 +64,9 @@ public class FeatureService {
                     feature.setDescription(updatedFeatureDto.description());
                     feature.setDeadline(updatedFeatureDto.deadline());
                     feature.setProjectid(project);
+                    feature.setPersonDayEstimate(updatedFeatureDto.PersonDayEstimate());
+                    feature.setDeliveryDate(updatedFeatureDto.deliveryDate());
+                    feature.setStatus(FeatureStatus.valueOf(updatedFeatureDto.status()));
                     return featureRepository.save(feature);
                 }).orElseThrow(() -> new ResourceNotFound("Feature not found"));
 
