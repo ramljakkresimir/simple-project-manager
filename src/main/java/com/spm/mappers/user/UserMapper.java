@@ -3,15 +3,10 @@ package com.spm.mappers.user;
 import com.spm.dtos.user.UserCreationDto;
 import com.spm.dtos.user.UserViewDto;
 import com.spm.models.UserProject;
-import com.spm.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class UserMapper {
-
-    private UserRepository userRepository;
 
     public static UserViewDto userToUserViewDto(UserProject user) {
         return new UserViewDto(user.getId(), user.getUsername(), user.getName(), user.getSurname(), user.getAge());

@@ -5,7 +5,7 @@ import com.spm.dtos.user.UserEditDto;
 import com.spm.dtos.user.UserEditPartialDto;
 import com.spm.exceptions.ResourceNotFound;
 import com.spm.mappers.user.UserMapper;
-import com.spm.mappers.user.UserMapperMapping;
+import com.spm.mappers.user.UserMapStructMapper;
 import com.spm.models.UserProject;
 import com.spm.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class UserService implements IUserService{
+public class UserService{
 
     private UserRepository userRepository;
 
@@ -50,10 +50,8 @@ public class UserService implements IUserService{
     public UserProject updatePartialUser(int id, UserEditPartialDto updateUser) {
         UserProject user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFound("Resurs nije pronađen"));
-        UserMapperMapping userMapperMapping = UserMapperMapping.INSTANCE;
-        System.out.println(user);
-        userMapperMapping.updateUserFromDto(updateUser,user);
-        System.out.println(user);
+        UserMapStructMapper userMapStructMapper = UserMapStructMapper.INSTANCE;
+        userMapStructMapper.updateUserFromDto(updateUser,user);
         return userRepository.save(user);
     }
 }

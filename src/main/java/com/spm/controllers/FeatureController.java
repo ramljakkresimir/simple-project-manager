@@ -1,17 +1,18 @@
 package com.spm.controllers;
 
 import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureUpdateDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.mappers.feature.FeatureMapper;
 import com.spm.models.Feature;
 import com.spm.services.FeatureService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/features")
@@ -87,9 +88,9 @@ public class FeatureController {
     @PatchMapping("/{id}")
     public ResponseEntity<Feature> updateFeatureAttributes(
             @PathVariable Integer id,
-            @RequestBody Map<String, Object> updates) {
+            @Valid @RequestBody FeatureUpdateDto featureUpdateDto) {
         try {
-            Feature updatedFeature = featureService.updateFeatureAttributes(id, updates);
+            Feature updatedFeature = featureService.updateFeatureAttributes(id, featureUpdateDto);
             return ResponseEntity.ok(updatedFeature);
 
         } catch (RuntimeException ex) {

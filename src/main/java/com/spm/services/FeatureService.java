@@ -1,9 +1,11 @@
 package com.spm.services;
 
 import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureUpdateDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.dtos.user.UserFeaturesCountDto;
 import com.spm.exceptions.ResourceNotFound;
+import com.spm.mappers.feature.FeatureMapStructMapper;
 import com.spm.mappers.feature.FeatureMapper;
 import com.spm.models.Feature;
 import com.spm.models.FeatureStatus;
@@ -12,7 +14,6 @@ import com.spm.models.UserProject;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.repositories.UserRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,35 +73,11 @@ public class FeatureService {
         return featureMapper.toDto(updatedFeature);
     }
 
-    public Feature updateFeatureAttributes(Integer featureId, Map<String, Object> updates) {
+    public Feature updateFeatureAttributes(Integer featureId, FeatureUpdateDto featureUpdateDto) {
         Feature feature = featureRepository.findById(featureId)
                 .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
-
-        updates.forEach((key, value) -> {
-            switch (key) {
-                case "deadline":
-                    feature.setDeadline(LocalDate.parse(value.toString()));
-                    break;
-                case "status":
-                    feature.setStatus(FeatureStatus.valueOf(value.toString()));
-                    break;
-                case "description":
-                    feature.setDescription(value.toString());
-                    break;
-                case "name":
-                    feature.setName(value.toString());
-                    break;
-                case "deliveryDate":
-                    feature.setDeliveryDate(LocalDate.parse(value.toString()));
-                    break;
-                case "personDayEstimate":
-                    feature.setPersonDayEstimate(Integer.parseInt(value.toString()));
-                    break;
-                default:
-                    throw new RuntimeException("Invalid field: " + key);
-            }
-        });
-
+        FeatureMapStructMapper mapper = FeatureMapStructMapper.INSTANCE;
+        mapper.partialUpdateFeatureFromDto(featureUpdateDto, feature);
         return featureRepository.save(feature);
     }
 
@@ -128,27 +105,10 @@ public class FeatureService {
         return featureRepository.findByUserIsNull();
     }
 
-    public Feature markDeliveryDate(Integer featureId, @Valid LocalDate deliveryDate){
-        Feature feature = featureRepository.findById(featureId)
-                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
-
-        feature.setDeliveryDate(deliveryDate);
-
-        return featureRepository.save(feature);
-    }
-
     public List<Feature> getFeaturesDeliveredInTimePeriod(LocalDate startDate, LocalDate endDate) {
         return featureRepository.findDeliveredFeaturesInTimePeriod(startDate, endDate);
     }
 
-    public Feature setPersonDayEstimate(Integer featureId, Integer personDayEstimate){
-        Feature feature = featureRepository.findById(featureId)
-                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
-
-        feature.setPersonDayEstimate(personDayEstimate);
-
-        return featureRepository.save(feature);
-    }
 
     public void deleteFeature(Integer id) {
         if (!featureRepository.existsById(id)) {
@@ -166,7 +126,6 @@ public class FeatureService {
     public Map<FeatureStatus,List<Feature>> getFeaturesByStatus(int projectId) {
         Project project = projectRepository.findById((long) projectId)
                 .orElseThrow(()-> new ResourceNotFound("Projekt nije pronađen"));
-        System.out.println(project.getName());
         return featureRepository.findAllByProjectid(project)
                 .stream()
                 .filter(feature -> feature.getStatus() != null)

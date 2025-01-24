@@ -3,12 +3,8 @@ package com.spm.controllers;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.dtos.user.UserFeaturesCountDto;
 import com.spm.models.*;
-import com.spm.repositories.FeatureRepository;
-import com.spm.repositories.ProjectRepository;
 import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +20,10 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final FeatureService featureService;
-    private final FeatureRepository featureRepository;
 
-    @Autowired
-    public ProjectController(ProjectService projectService, FeatureService featureService,
-                             ProjectRepository projectRepository,
-                             FeatureRepository featureRepository, FeatureRepository featureRepository1) {
+    public ProjectController(ProjectService projectService, FeatureService featureService) {
         this.projectService = projectService;
         this.featureService = featureService;
-        this.featureRepository = featureRepository1;
     }
 
     @GetMapping
@@ -42,12 +33,8 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Integer id) {
-        try {
             Project project = projectService.getProjectById(id);
             return ResponseEntity.ok(project);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build(); //return 404 if the project is not found
-        }
     }
 
     @PostMapping
@@ -107,22 +94,14 @@ public class ProjectController {
 
     @GetMapping("/{id}/equipment")
     public ResponseEntity<List<Equipment>> getEquipmentByProjectId(@PathVariable Long id) {
-        try {
             List<Equipment> equipmentList = projectService.getAllEquipmentByProjectId(id);
             return new ResponseEntity<>(equipmentList, HttpStatus.OK);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @GetMapping("{id}/users")
     public ResponseEntity<List<UserProject>> getUsersByProjectId(@PathVariable Long id) {
-        try {
             List<UserProject> userList = projectService.getAllUsersByProjectId(id);
             return new ResponseEntity<>(userList, HttpStatus.OK);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @GetMapping("/{id}/features")

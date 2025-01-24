@@ -41,7 +41,7 @@ public class ProjectService {
 
     public Project getProjectById(Integer id) {
         return projectRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFound("Project not found with ID: " + id));
     }
 
     public Project createProject(Project project){
@@ -57,7 +57,7 @@ public class ProjectService {
 
                     //save updated project
                     return projectRepository.save(existingProject);
-                }).orElseThrow(() -> new RuntimeException("Project not found with ID: " + id));
+                }).orElseThrow(() -> new ResourceNotFound("Project not found with ID: " + id));
     }
 
     public Feature addFeature(Integer projectId, Integer featureId) {
@@ -132,13 +132,13 @@ public class ProjectService {
 
     public List<Equipment> getAllEquipmentByProjectId(Long projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+                .orElseThrow(() -> new ResourceNotFound("Project not found with id: " + projectId));
         return new ArrayList<>(project.getEquipment());
     }
 
     public List<UserProject> getAllUsersByProjectId(Long projectId){
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found with id: " + projectId));
+                .orElseThrow(() -> new ResourceNotFound("Project not found with id: " + projectId));
         return new ArrayList<>(project.getUsers());
     }
 }

@@ -17,6 +17,10 @@ spring:
       mode: always
   profiles:
     active: local
+  docker:
+    compose:
+      enabled: false
+
 
 springdoc:
   api-docs:

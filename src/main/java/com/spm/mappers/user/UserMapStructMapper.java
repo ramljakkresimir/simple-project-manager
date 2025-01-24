@@ -11,8 +11,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE )
-public interface UserMapperMapping {
-    UserMapperMapping INSTANCE = Mappers.getMapper(UserMapperMapping.class);
+public interface UserMapStructMapper {
+    UserMapStructMapper INSTANCE = Mappers.getMapper(UserMapStructMapper.class);
 
     void updateUserFromDto(UserEditPartialDto dto, @MappingTarget UserProject user);
     void  userToUserViewDto(UserProject user,@MappingTarget UserViewDto userViewDto);

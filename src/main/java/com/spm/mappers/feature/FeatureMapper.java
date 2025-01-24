@@ -1,11 +1,14 @@
 package com.spm.mappers.feature;
 
 import com.spm.dtos.feature.FeatureCreationDto;
+import com.spm.dtos.feature.FeatureUpdateDto;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.models.Feature;
 import com.spm.models.FeatureStatus;
 import com.spm.models.Project;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class FeatureMapper {
@@ -20,6 +23,7 @@ public class FeatureMapper {
         feature.setStatus(FeatureStatus.valueOf(featureCreationDto.status()));
         return feature;
     }
+
 
     public FeatureViewDto toDto(Feature feature) {
         return new FeatureViewDto(
