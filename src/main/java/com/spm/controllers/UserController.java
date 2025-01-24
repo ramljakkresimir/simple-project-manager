@@ -45,6 +45,11 @@ private final UserService userService;
         UserProject userProject = userService.getUserById(id);
         return ResponseEntity.ok().body(userProject.getProjects());
     }
+    @GetMapping("/{id}/features")
+    public ResponseEntity<Set<Project>> getFeaturesByUserId(@PathVariable int id) {
+        UserProject userProject = userService.getUserById(id);
+        return ResponseEntity.ok().body(userProject.getProjects());
+    }
 
 @PostMapping
     public ResponseEntity<UserViewDto> createUser(@Valid @RequestBody UserCreationDto newUser) {
