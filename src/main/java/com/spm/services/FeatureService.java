@@ -75,7 +75,7 @@ public class FeatureService {
 
     public Feature updateFeatureAttributes(Integer featureId, FeatureUpdateDto featureUpdateDto) {
         Feature feature = featureRepository.findById(featureId)
-                .orElseThrow(() -> new RuntimeException("Feature not found with ID: " + featureId));
+                .orElseThrow(() -> new ResourceNotFound("Feature not found with ID: " + featureId));
         FeatureMapStructMapper mapper = FeatureMapStructMapper.INSTANCE;
         mapper.partialUpdateFeatureFromDto(featureUpdateDto, feature);
         return featureRepository.save(feature);

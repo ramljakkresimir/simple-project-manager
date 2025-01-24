@@ -1,5 +1,6 @@
 package com.spm.dtos.feature;
 
+import com.spm.models.FeatureStatus;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.PastOrPresent;
 
@@ -12,5 +13,5 @@ public record FeatureUpdateDto(
         @Nullable Integer projectId,
         @Nullable @PastOrPresent(message = "Delivery date should be past or present.") LocalDate deliveryDate,
         @Nullable Integer personDayEstimate,
-        @Nullable String status
+        @Nullable FeatureStatus status
 ) {}
