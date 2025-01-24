@@ -50,7 +50,7 @@ public class ProjectController {
         return new ResponseEntity<>(createdProject, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/features")
+    @PostMapping("/{id}/assignFeature")
     public ResponseEntity<Feature> addFeatureToProject(@PathVariable Integer id, @RequestBody Integer featureId) {
         Feature addedFeature = projectService.addFeature(id, featureId);
 
@@ -61,11 +61,9 @@ public class ProjectController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{id}/equipment")
+    @PostMapping("/{id}/assignEquipment")
     public ResponseEntity<Equipment> addEquipmentToProject(@PathVariable Integer id, @RequestBody Integer equipmentId) {
         Equipment addedEquipment = projectService.addEquipment(id, equipmentId);
-        System.out.println(id);
-        System.out.println(equipmentId);
 
         if (addedEquipment != null) {
             return new ResponseEntity<>(addedEquipment, HttpStatus.OK); //return the added equipment
@@ -74,11 +72,9 @@ public class ProjectController {
         }
     }
 
-    @PostMapping("/{id}/users")
+    @PostMapping("/{id}/assignUser")
     public ResponseEntity<UserProject> addUserToProject(@PathVariable Integer id, @RequestBody Integer userId) {
         UserProject addedUser = projectService.addUser(id, userId);
-        System.out.println(id);
-        System.out.println(userId);
 
         if (addedUser != null) {
             return new ResponseEntity<>(addedUser, HttpStatus.OK); //return the added user
