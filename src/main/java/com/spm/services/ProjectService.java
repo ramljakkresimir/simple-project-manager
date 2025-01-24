@@ -36,7 +36,7 @@ public class ProjectService {
     private final FeatureMapper featureMapper;
     private final ProjectMapper projectMapper;
 
-    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
+    public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper, ProjectMapper projectMapper) {
         this.projectRepository = projectRepository;
         this.featureRepository = featureRepository;
         this.equipmentRepository = equipmentRepository;

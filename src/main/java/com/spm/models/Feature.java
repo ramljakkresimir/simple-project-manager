@@ -45,7 +45,7 @@ public class Feature {
     private Integer personDayEstimate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",length = 40, nullable = false)
+    @Column(name = "status",length = 40, nullable = true)
     //default je not started
     private FeatureStatus status = FeatureStatus.NOT_STARTED;
 
