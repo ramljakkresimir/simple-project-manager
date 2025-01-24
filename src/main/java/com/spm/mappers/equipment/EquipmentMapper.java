@@ -10,20 +10,21 @@ public class EquipmentMapper {
 
     public Equipment toEntity(EquipmentRequestDTO dto) {
         Equipment equipment = new Equipment();
-        equipment.setName(dto.getName());
-        equipment.setPrice(dto.getPrice());
-        equipment.setWeight(dto.getWeight());
-        equipment.setQuantity(dto.getQuantity());
+        equipment.setId(null);
+        equipment.setName(dto.name());
+        equipment.setPrice(dto.price());
+        equipment.setWeight(dto.weight());
+        equipment.setQuantity(dto.quantity());
         return equipment;
     }
 
     public EquipmentResponseDTO toResponseDTO(Equipment equipment) {
-        EquipmentResponseDTO dto = new EquipmentResponseDTO();
-        dto.setId(equipment.getId().longValue());
-        dto.setName(equipment.getName());
-        dto.setPrice(equipment.getPrice());
-        dto.setWeight(equipment.getWeight());
-        dto.setQuantity(equipment.getQuantity());
-        return dto;
+        return new EquipmentResponseDTO(
+                equipment.getId(),
+                equipment.getName(),
+                equipment.getPrice(),
+                equipment.getWeight(),
+                equipment.getQuantity()
+        );
     }
 }

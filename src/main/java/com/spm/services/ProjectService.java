@@ -1,8 +1,10 @@
 package com.spm.services;
 
 import com.spm.dtos.feature.FeatureViewDto;
+import com.spm.dtos.project.ProjectBudgetSummaryDTO;
 import com.spm.exceptions.ResourceNotFound;
 import com.spm.mappers.feature.FeatureMapper;
+import com.spm.mappers.project.ProjectMapper;
 import com.spm.models.Equipment;
 import com.spm.models.Feature;
 import com.spm.models.Project;
@@ -11,9 +13,15 @@ import com.spm.repositories.EquipmentRepository;
 import com.spm.repositories.FeatureRepository;
 import com.spm.repositories.ProjectRepository;
 import com.spm.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +34,7 @@ public class ProjectService {
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
     private final FeatureMapper featureMapper;
+    private final ProjectMapper projectMapper;
 
     public ProjectService(ProjectRepository projectRepository, FeatureRepository featureRepository, EquipmentRepository equipmentRepository, UserRepository userRepository, FeatureMapper featureMapper) {
         this.projectRepository = projectRepository;
@@ -33,6 +42,7 @@ public class ProjectService {
         this.equipmentRepository = equipmentRepository;
         this.userRepository = userRepository;
         this.featureMapper = featureMapper;
+        this.projectMapper = projectMapper;
     }
 
     public List<Project> getAllProjects(){
@@ -54,6 +64,7 @@ public class ProjectService {
                     existingProject.setName(updatedProject.getName());
                     existingProject.setDescription(updatedProject.getDescription());
                     existingProject.setBudget(updatedProject.getBudget());
+                    existingProject.setDeadline(updatedProject.getDeadline());
 
                     //save updated project
                     return projectRepository.save(existingProject);
@@ -140,5 +151,77 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFound("Project not found with id: " + projectId));
         return new ArrayList<>(project.getUsers());
+    }
+
+    public List<ProjectBudgetSummaryDTO> getProjectBudgetSummary() {
+        List<Project> projects = projectRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return projects.stream()
+                .map(projectMapper::toBudgetSummaryDTO)
+                .toList();
+    }
+
+    public List<ProjectBudgetSummaryDTO> getFilteredBudgetSummaries(
+            Boolean exceededBudget, String sortBy, String order, int page, int size) {
+
+        // Sorting direction
+        Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sort = Sort.by(direction, sortBy);
+
+        // Retrieve paginated and sorted projects
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Project> projectPage = projectRepository.findAll(pageable);
+
+        // Stream through the projects, apply exceededBudget filter if applicable
+        return projectPage.getContent().stream()
+                .filter(project -> {
+                    if (exceededBudget != null) {
+                        // Calculate if the budget was exceeded
+                        double totalEquipmentCost = project.getEquipment().stream()
+                                .mapToDouble(Equipment::getPrice)
+                                .sum();
+                        return exceededBudget.equals(totalEquipmentCost > project.getBudget());
+                    }
+                    return true; // No filter applied
+                })
+                .map(projectMapper::toBudgetSummaryDTO)
+                .toList();
+    }
+
+    @Scheduled(fixedRate = 10000) // Run every 10 seconds for test purposes, change this line to:  @Scheduled(cron = "0 0 8 * * *")
+    public void notifyUpcomingDeadlines() {
+        LocalDate today = LocalDate.now();
+        LocalDate nextWeek = today.plusDays(7);
+
+        List<Project> upcomingProjects = projectRepository
+                .findAll().stream()
+                .filter(project -> !project.getDeadline().isBefore(today) && project.getDeadline().isBefore(nextWeek))
+                .toList();
+
+        // Fetch features with deadlines within the next 7 days
+        List<Feature> upcomingFeatures = featureRepository
+                .findAll().stream()
+                .filter(feature -> !feature.getDeadline().isBefore(today) && feature.getDeadline().isBefore(nextWeek))
+                .toList();
+
+        if(!upcomingProjects.isEmpty()) {
+            System.out.println("\n");
+            System.out.println("Upcoming project deadlines within the next 7 days:");
+            upcomingProjects.forEach(project -> {
+                System.out.println("Project: " + project.getName() + " | Deadline: " + project.getDeadline());
+            });
+        } else {
+            System.out.println("No upcoming project deadlines in the next 7 days.");
+        }
+
+        System.out.println("\n---------------------------------------------------------------------------------------\n");
+
+        if (!upcomingFeatures.isEmpty()) {
+            System.out.println("Upcoming feature deadlines within the next 7 days:");
+            upcomingFeatures.forEach(feature -> {
+                System.out.println("Feature: " + feature.getName() + " | Deadline: " + feature.getDeadline());
+            });
+        } else {
+            System.out.println("No upcoming feature deadlines in the next 7 days.");
+        }
     }
 }

@@ -1,17 +1,13 @@
 package com.spm.services;
 
-import com.spm.exceptions.ResourceNotFound;
 import com.spm.models.Equipment;
 import com.spm.repositories.EquipmentRepository;
 import org.springframework.stereotype.Service;
-
-
 
 import java.util.List;
 
 @Service
 public class EquipmentService {
-
 
     private final EquipmentRepository equipmentRepository;
 
@@ -25,7 +21,7 @@ public class EquipmentService {
 
     public Equipment getEquipmentById(Long id) {
         return equipmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Equipment not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Equipment not found with id: " + id));
     }
 
     public Equipment addEquipment(Equipment equipment) {
@@ -45,8 +41,8 @@ public class EquipmentService {
         equipmentRepository.deleteById(id);
     }
 
-    public List<Equipment> getEquipmentByProjectId(Long projectId) {
-        return equipmentRepository.findByProjectId(projectId);
-    }
+    ///public List<Equipment> getEquipmentByProjectId(Long projectId) {
+    ///    return equipmentRepository.findByProjectId(projectId);
+    ///}
 }
 

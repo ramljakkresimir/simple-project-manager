@@ -3,6 +3,13 @@ package com.spm.controllers;
 import com.spm.dtos.feature.FeatureViewDto;
 import com.spm.dtos.user.UserFeaturesCountDto;
 import com.spm.models.*;
+import com.spm.dtos.project.ProjectBudgetSummaryDTO;
+import com.spm.models.Equipment;
+import com.spm.models.Feature;
+import com.spm.models.Project;
+import com.spm.models.UserProject;
+import com.spm.repositories.FeatureRepository;
+import com.spm.repositories.ProjectRepository;
 import com.spm.services.FeatureService;
 import com.spm.services.ProjectService;
 import org.springframework.http.HttpStatus;
@@ -120,4 +127,23 @@ public class ProjectController {
         return ResponseEntity.ok(featureService.getFeaturesByStatus(projectId));
     }
 
+    ///@GetMapping("/exceeded-budget")
+    ///public ResponseEntity<List<ProjectBudgetSummaryDTO>> getProjectsExceedingBudget() {
+    ///    List<ProjectBudgetSummaryDTO> projects = projectService.getProjectBudgetSummary();
+    ///    return new ResponseEntity<>(projects, HttpStatus.OK);
+   /// }
+
+    @GetMapping("/budget-summary")
+    public ResponseEntity<List<ProjectBudgetSummaryDTO>> getBudgetSummaries(
+            @RequestParam(required = false) Boolean exceededBudget, // Filter by exceeded budget
+            @RequestParam(defaultValue = "id") String sortBy, // Sorting field
+            @RequestParam(defaultValue = "asc") String order, // Sorting order
+            @RequestParam(defaultValue = "0") int page, // Page number
+            @RequestParam(defaultValue = "10") int size // Page size
+    ) {
+        List<ProjectBudgetSummaryDTO> budgetSummaries = projectService.getFilteredBudgetSummaries(
+                exceededBudget, sortBy, order, page, size
+        );
+        return new ResponseEntity<>(budgetSummaries, HttpStatus.OK);
+    }
 }

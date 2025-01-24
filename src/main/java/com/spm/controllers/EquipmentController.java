@@ -5,6 +5,7 @@ import com.spm.dtos.equipment.EquipmentRequestDTO;
 import com.spm.mappers.equipment.EquipmentMapper;
 import com.spm.models.Equipment;
 import com.spm.services.EquipmentService;
+///import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 public class EquipmentController {
 
     private final EquipmentService equipmentService;
-
     private final EquipmentMapper equipmentMapper;
 
     public EquipmentController(EquipmentService equipmentService, EquipmentMapper equipmentMapper) {
@@ -58,10 +58,10 @@ public class EquipmentController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/project/{projectId}")
-    public List<EquipmentResponseDTO> getEquipmentByProjectId(@PathVariable Long projectId) {
-        return equipmentService.getEquipmentByProjectId(projectId).stream()
-                .map(equipmentMapper::toResponseDTO)
-                .collect(Collectors.toList());
-    }
+    ///@GetMapping("/project/{projectId}")
+    ///public List<EquipmentResponseDTO> getEquipmentByProjectId(@PathVariable Long projectId) {
+    ///    return equipmentService.getEquipmentByProjectId(projectId).stream()
+    ///            .map(equipmentMapper::toResponseDTO)
+    ///            .collect(Collectors.toList());
+    ///}
 }
