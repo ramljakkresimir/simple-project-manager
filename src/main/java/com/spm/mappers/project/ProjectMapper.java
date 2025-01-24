@@ -17,7 +17,8 @@ public class ProjectMapper {
                 project.getId(),
                 project.getName(),
                 project.getDescription(),
-                project.getBudget()
+                project.getBudget(),
+                project.getDeadline()
         );
     }
 
@@ -27,6 +28,7 @@ public class ProjectMapper {
         project.setName((creationDto.name()));
         project.setDescription(creationDto.description());
         project.setBudget((creationDto.budget()));
+        project.setDeadline((creationDto.deadline()));
 
         return project;
     }
@@ -43,7 +45,8 @@ public class ProjectMapper {
                 project.getName(),
                 project.getBudget(),
                 totalEquipmentCost,
-                exceededBudget
+                exceededBudget,
+                project.getDeadline()
         );
     }
 

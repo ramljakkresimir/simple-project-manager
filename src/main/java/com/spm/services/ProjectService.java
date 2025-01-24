@@ -65,6 +65,7 @@ public class ProjectService {
                     existingProject.setName(updatedProject.getName());
                     existingProject.setDescription(updatedProject.getDescription());
                     existingProject.setBudget(updatedProject.getBudget());
+                    existingProject.setDeadline(updatedProject.getDeadline());
 
                     //save updated project
                     return projectRepository.save(existingProject);
@@ -186,10 +187,15 @@ public class ProjectService {
                 .toList();
     }
 
-    @Scheduled(fixedRate = 10000) // Run every 10 seconds
+    @Scheduled(fixedRate = 10000) // Run every 10 seconds for test purposes, change this line to:  @Scheduled(cron = "0 0 8 * * *")
     public void notifyUpcomingDeadlines() {
         LocalDate today = LocalDate.now();
         LocalDate nextWeek = today.plusDays(7);
+
+        List<Project> upcomingProjects = projectRepository
+                .findAll().stream()
+                .filter(project -> !project.getDeadline().isBefore(today) && project.getDeadline().isBefore(nextWeek))
+                .toList();
 
         // Fetch features with deadlines within the next 7 days
         List<Feature> upcomingFeatures = featureRepository
@@ -197,13 +203,25 @@ public class ProjectService {
                 .filter(feature -> !feature.getDeadline().isBefore(today) && feature.getDeadline().isBefore(nextWeek))
                 .toList();
 
+        if(!upcomingProjects.isEmpty()) {
+            System.out.println("\n");
+            System.out.println("Upcoming project deadlines within the next 7 days:");
+            upcomingProjects.forEach(project -> {
+                System.out.println("Project: " + project.getName() + " | Deadline: " + project.getDeadline());
+            });
+        } else {
+            System.out.println("No upcoming project deadlines in the next 7 days.");
+        }
+
+        System.out.println("\n---------------------------------------------------------------------------------------\n");
+
         if (!upcomingFeatures.isEmpty()) {
-            System.out.println("Upcoming Deadlines within the next 7 days:");
+            System.out.println("Upcoming feature deadlines within the next 7 days:");
             upcomingFeatures.forEach(feature -> {
                 System.out.println("Feature: " + feature.getName() + " | Deadline: " + feature.getDeadline());
             });
         } else {
-            System.out.println("No upcoming deadlines in the next 7 days.");
+            System.out.println("No upcoming feature deadlines in the next 7 days.");
         }
     }
 }

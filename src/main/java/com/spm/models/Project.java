@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -34,6 +35,10 @@ public class Project {
     @NotNull
     @Column(name = "budget", nullable = false)
     private Double budget;
+
+    @NotNull
+    @Column(name = "deadline", nullable = false)
+    private LocalDate deadline;
 
     @OneToMany(mappedBy = "projectid",fetch = FetchType.LAZY)
     @JsonIgnore
